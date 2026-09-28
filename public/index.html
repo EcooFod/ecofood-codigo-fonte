@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoFood - Cadastro de Utilizador</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 320px;
+        }
+        h2 { 
+            text-align: center; 
+            margin-bottom: 20px; 
+            color: #333; 
+        }
+        .input-group { 
+            margin-bottom: 15px; 
+        }
+        .input-group label { 
+            display: block; 
+            margin-bottom: 5px; 
+            color: #666; 
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover { 
+            background-color: #218838; 
+        }
+        #mensagem { 
+            margin-top: 15px; 
+            text-align: center; 
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>EcoFood - Cadastro</h2>
+    <form id="formCadastro">
+        <div class="input-group">
+            <label for="nome">Nome:</label>
+            <input type="text" id="nome" placeholder="Digite o seu nome" required>
+        </div>
+        <div class="input-group">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" placeholder="Digite o seu e-mail" required>
+        </div>
+        <button type="submit">Cadastrar</button>
+    </form>
+    <div id="mensagem"></div>
+</div>
+
+<script>
+    const form = document.getElementById('formCadastro');
+    const mensagemDiv = document.getElementById('mensagem');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+
+        try {
+            const resposta = await fetch('/cadastrar', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, email })
+            });
+
+            const resultado = await resposta.json();
+
+            if (resposta.ok) {
+                mensagemDiv.style.color = 'green';
+                mensagemDiv.innerText = resultado.mensagem;
+                form.reset();
+            } else {
+                mensagemDiv.style.color = 'red';
+                mensagemDiv.innerText = resultado.erro;
+            }
+        } catch (erro) {
+            mensagemDiv.style.color = 'red';
+            mensagemDiv.innerText = 'Erro ao conectar ao servidor.';
+        }
+    });
+</script>
+
+</body>
+</html>
