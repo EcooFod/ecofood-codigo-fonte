@@ -1,0 +1,405 @@
+/* =========================================================
+   EcoFood - estilo compartilhado por todas as telas
+   Cores iguais às do protótipo do Lovable
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;700&display=swap');
+
+:root {
+    --fundo: #f8f3ec;          /* bege claro */
+    --cartao: #fffdf9;
+    --verde: #2c5a3c;          /* verde escuro */
+    --verde-escuro: #224a31;
+    --verde-claro: #e6efe8;
+    --laranja: #e57a2c;
+    --laranja-claro: #fdebdc;
+    --texto: #1f2a24;
+    --texto-suave: #6b726d;
+    --borda: #e8e0d4;
+    --erro: #c0392b;
+    --raio: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'DM Sans', Arial, sans-serif;
+    background: var(--fundo);
+    color: var(--texto);
+}
+
+h1, h2, h3, .serifa { font-family: 'DM Serif Display', Georgia, serif; font-weight: 400; }
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------- Cabeçalho ---------- */
+.topo {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--fundo);
+    border-bottom: 1px solid var(--borda);
+}
+.topo-conteudo {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+.logo {
+    font-family: 'DM Sans', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: var(--verde);
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+}
+.busca {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--cartao);
+    border: 1px solid var(--borda);
+    border-radius: 999px;
+    padding: 10px 16px;
+    color: var(--texto-suave);
+}
+.busca input {
+    border: none;
+    background: none;
+    outline: none;
+    width: 100%;
+    font: inherit;
+    color: var(--texto);
+}
+.menu { display: flex; gap: 22px; align-items: center; }
+.menu a { color: var(--texto-suave); font-weight: 500; }
+.menu a:hover, .menu a.ativo { color: var(--verde); }
+.menu a.ativo { font-weight: 700; }
+
+.avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--verde);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+.usuario { display: flex; align-items: center; gap: 10px; }
+.link-sair { font-size: 13px; color: var(--texto-suave); cursor: pointer; }
+.link-sair:hover { color: var(--erro); }
+
+/* ---------- Botões ---------- */
+.botao {
+    display: inline-block;
+    border: none;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    background: var(--verde);
+    color: #fff;
+    text-align: center;
+    transition: background .15s, transform .15s;
+}
+.botao:hover { background: var(--verde-escuro); }
+.botao:active { transform: scale(.98); }
+.botao.laranja { background: var(--laranja); }
+.botao.laranja:hover { background: #cf6a20; }
+.botao.contorno { background: transparent; color: var(--verde); border: 1.5px solid var(--verde); }
+.botao.contorno:hover { background: var(--verde-claro); }
+.botao.pequeno { padding: 8px 16px; font-size: 14px; }
+.botao.cheio { width: 100%; }
+
+/* ---------- Página inicial ---------- */
+.pagina {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 28px;
+}
+.saudacao { color: var(--texto-suave); margin: 0 0 4px; }
+.titulo-grande { font-size: 44px; margin: 0 0 24px; line-height: 1.1; }
+
+.banner {
+    position: relative;
+    overflow: hidden;
+    background: var(--verde);
+    color: #fff;
+    border-radius: 22px;
+    padding: 32px;
+    margin-bottom: 24px;
+}
+.banner::after {                     /* círculos decorativos */
+    content: '';
+    position: absolute;
+    right: -60px; top: -80px;
+    width: 280px; height: 280px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+}
+.selo {
+    display: inline-block;
+    background: var(--laranja);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+}
+.banner h2 { font-size: 34px; margin: 0 0 10px; line-height: 1.15; }
+.banner h2 span { color: #f3a466; }
+.banner p { margin: 0; opacity: .85; }
+
+.chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+.chip {
+    border: 1px solid var(--borda);
+    background: var(--cartao);
+    border-radius: 999px;
+    padding: 8px 16px;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--texto);
+}
+.chip.ativo { background: var(--verde); color: #fff; border-color: var(--verde); }
+
+.secao-topo { display: flex; justify-content: space-between; align-items: baseline; }
+.secao-topo h2 { font-size: 26px; margin: 0 0 16px; }
+.secao-topo a { color: var(--verde); font-size: 14px; font-weight: 500; }
+
+.grade {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 18px;
+}
+.produto {
+    background: var(--cartao);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow .15s, transform .15s;
+}
+.produto:hover { box-shadow: 0 8px 24px rgba(0,0,0,.08); transform: translateY(-2px); }
+.produto .foto {
+    height: 150px;
+    display: grid;
+    place-items: center;
+    font-size: 56px;
+    background: linear-gradient(135deg, #f1e3cf, #e6d2b5);
+    position: relative;
+}
+.produto .foto img { width: 100%; height: 100%; object-fit: cover; }
+.desconto {
+    position: absolute; top: 10px; left: 10px;
+    background: var(--laranja); color: #fff;
+    font-size: 12px; font-weight: 700;
+    padding: 3px 9px; border-radius: 999px;
+}
+.produto .info { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.produto h3 { font-size: 18px; margin: 0; }
+.produto .restaurante { color: var(--texto-suave); font-size: 13px; }
+.precos { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+.preco-antigo { text-decoration: line-through; color: var(--texto-suave); font-size: 13px; }
+.preco { color: var(--verde); font-weight: 700; font-size: 18px; }
+.btn-add {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--verde);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+}
+.btn-add:hover { background: var(--laranja); }
+
+/* Lateral */
+.lateral h3 { font-size: 20px; margin: 44px 0 14px; }
+.loja {
+    display: flex; gap: 12px; align-items: center;
+    background: var(--cartao);
+    border: 1px solid var(--borda);
+    border-radius: var(--raio);
+    padding: 14px;
+    margin-bottom: 12px;
+}
+.loja .icone {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: var(--verde-claro);
+    display: grid; place-items: center; font-size: 20px;
+}
+.loja strong { display: block; font-size: 15px; }
+.loja small { color: var(--texto-suave); font-size: 12px; }
+.tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 999px; margin-top: 4px; background: var(--verde-claro); color: var(--verde); }
+.tag.laranja { background: var(--laranja-claro); color: var(--laranja); }
+
+.impacto {
+    background: var(--verde);
+    color: #fff;
+    border-radius: var(--raio);
+    padding: 24px;
+    text-align: center;
+    margin-top: 16px;
+}
+.impacto .numero { font-family: 'DM Serif Display', serif; font-size: 44px; line-height: 1.1; }
+.impacto .numero.laranja { color: #f3a466; }
+.impacto hr { border: none; border-top: 1px solid rgba(255,255,255,.15); margin: 16px 0; }
+.impacto small { opacity: .85; }
+
+.parceiro-card {
+    background: var(--laranja-claro);
+    border-radius: var(--raio);
+    padding: 20px;
+    margin-top: 16px;
+}
+.parceiro-card strong { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; display: block; margin-bottom: 6px; }
+.parceiro-card p { margin: 0 0 14px; font-size: 14px; color: var(--texto-suave); }
+
+/* ---------- Modal "faça login" ---------- */
+.fundo-modal {
+    position: fixed; inset: 0;
+    background: rgba(20, 30, 24, .45);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 50;
+    padding: 20px;
+}
+.fundo-modal.aberto { display: flex; }
+.modal {
+    background: var(--cartao);
+    border-radius: 22px;
+    padding: 32px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+}
+.modal .emoji { font-size: 44px; }
+.modal h2 { font-size: 28px; margin: 8px 0; }
+.modal p { color: var(--texto-suave); margin: 0 0 22px; }
+.modal .botao { margin-bottom: 10px; }
+
+/* Aviso rápido no canto (toast) */
+.toast {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--verde); color: #fff;
+    padding: 12px 22px; border-radius: 999px;
+    font-weight: 500;
+    transition: transform .25s;
+    z-index: 60;
+}
+.toast.visivel { transform: translateX(-50%) translateY(0); }
+
+/* ---------- Telas de login / cadastro ---------- */
+.login-cliente {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.lateral-esquerda {
+    background: var(--verde);
+    color: #fff;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+}
+.lateral-esquerda::after {
+    content: '';
+    position: absolute;
+    right: -120px; bottom: -120px;
+    width: 380px; height: 380px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.06);
+}
+.lateral-esquerda .logo { color: #fff; }
+.lateral-esquerda h1 { font-size: 46px; line-height: 1.1; margin: 0 0 16px; }
+.lateral-esquerda h1 span { color: #f3a466; }
+.lateral-esquerda p { opacity: .85; max-width: 420px; line-height: 1.5; }
+.beneficios { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 12px; }
+.beneficios li { display: flex; gap: 10px; align-items: center; }
+.beneficios li span {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    display: grid; place-items: center; font-size: 15px;
+}
+.lateral-esquerda .rodape { font-size: 13px; opacity: .7; }
+
+.area-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+}
+.caixa-login { width: 100%; max-width: 420px; }
+.caixa-login h2 { font-size: 32px; margin: 0 0 6px; }
+.caixa-login .sub { color: var(--texto-suave); margin: 0 0 24px; }
+
+.entrar-criar {
+    display: flex;
+    background: #efe7db;
+    border-radius: 999px;
+    padding: 4px;
+    margin-bottom: 24px;
+}
+.aba {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 10px;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 700;
+    color: var(--texto-suave);
+    cursor: pointer;
+}
+.aba.ativa { background: var(--cartao); color: var(--verde); box-shadow: 0 2px 6px rgba(0,0,0,.06); }
+
+.escondido { display: none !important; }
+
+.campo { margin-bottom: 14px; }
+.campo label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+.campo input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    background: var(--cartao);
+    font: inherit;
+    color: var(--texto);
+}
+.campo input:focus { outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px var(--verde-claro); }
+.linha { display: flex; gap: 12px; }
+.linha .campo { flex: 1; }
+
+.mensagem { margin-top: 14px; text-align: center; font-weight: 500; min-height: 22px; }
+.mensagem.sucesso { color: var(--verde); }
+.mensagem.erro { color: var(--erro); }
+
+.voltar { display: inline-block; margin-top: 22px; color: var(--texto-suave); font-size: 14px; }
+.voltar:hover { color: var(--verde); }
+
+/* ---------- Celular ---------- */
+@media (max-width: 900px) {
+    .pagina { grid-template-columns: 1fr; }
+    .menu, .busca { display: none; }
+    .topo-conteudo { justify-content: space-between; }
+    .tela-auth { grid-template-columns: 1fr; }
+    .lateral-esquerda { padding: 32px 24px; }
+    .lateral-esquerda h1 { font-size: 34px; }
+    .lateral-esquerda .rodape, .beneficios { display: none; }
+    .titulo-grande { font-size: 34px; }
+}
