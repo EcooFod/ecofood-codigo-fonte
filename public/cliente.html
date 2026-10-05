@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar — EcoFood</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="login-cliente">
+    <!-- Barra lateral -->
+    <div class="lateral-esquerda">
+        <a href="index.html" class="logo">EcoFood</a>
+        <div>
+            <h1>Comida boa<br>não vai pro <span>lixo.</span></h1>
+            <p>Reserve pratos de restaurantes perto de você com até 60% de desconto.</p>
+            <ul class="beneficios">
+                <li>Preços bem mais baratos</li>
+                <li>Restaurantes perto de você</li>
+                <li>Apoie restaurantes do seu bairro</li>
+                <li>Reserve em poucos cliques</li>
+            </ul>
+        </div>
+        <div class="rodape">Projeto Integrador · ADS</div>
+    </div>
+
+    <!-- LOGIN -->
+
+    <div class="area-login">
+        <div class="caixa-login">
+            <h2 id="titulologin">Bem-vindo de volta</h2>
+            <p class="sub" id="subForm">Entre para reservar suas ofertas.</p>
+
+            <div class="entrar-criar">
+                <button class="aba ativa" data-alvo="painelLogin">Entrar</button>
+                <button class="aba" data-alvo="painelCadastro">Criar conta</button>
+            </div>
+
+            
+            <div id="painelLogin" class="painel">
+                <form id="formLogin">
+                    <div class="campo">
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" name="email" placeholder="email@email.com" required>
+                    </div>
+                    <div class="campo">
+                        <label for="loginSenha">Senha</label>
+                        <input type="password" id="loginSenha" name="senha" placeholder="Sua senha" required>
+                    </div>
+                    <button type="submit" class="botao cheio">Entrar</button>
+                </form>
+                <div id="mensagemLogin" class="mensagem"></div>
+            </div>
+
+            <!-- CADASTRO -->
+            <div id="painelCadastro" class="painel escondido">
+                <form id="formCadastro">
+                    <div class="campo">
+                        <label for="nome">Nome completo</label>
+                        <input type="text" id="nome" name="nome" placeholder="Seu nome" required>
+                    </div>
+                    <div class="linha">
+                        <div class="campo">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" name="email" placeholder="voce@email.com" required>
+                        </div>
+                        <div class="campo">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(62) 99999-9999">
+                        </div>
+                    </div>
+                    <div class="linha">
+                        <div class="campo">
+                            <label for="senha">Senha</label>
+                            <input type="password" id="senha" name="senha" placeholder="Mín. 6 caracteres" minlength="6" required>
+                        </div>
+                        <div class="campo">
+                            <label for="confirmarSenha">Confirmar senha</label>
+                            <input type="password" id="confirmarSenha" name="confirmar_senha" placeholder="Repita a senha" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="botao cheio">Criar conta</button>
+                </form>
+                <div id="mensagemCadastro" class="mensagem"></div>
+            </div>
+
+            <a class="voltar" href="index.html">← Voltar para a página inicial</a>
+        </div>
+    </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+    configurarAbas();
+
+    const formLogin = document.getElementById('formLogin');
+    const formCadastro = document.getElementById('formCadastro');
+    const mensagemLogin = document.getElementById('mensagemLogin');
+    const mensagemCadastro = document.getElementById('mensagemCadastro');
+
+    // Troca título conforme a aba
+    function atualizarTitulo(aba) {
+        const cadastro = aba === 'painelCadastro';
+        document.getElementById('tituloForm').innerText = cadastro ? 'Crie sua conta' : 'Bem-vindo de volta';
+        document.getElementById('subForm').innerText = cadastro
+            ? 'Leva menos de um minuto.'
+            : 'Entre para reservar suas ofertas.';
+    }
+    document.querySelectorAll('.aba').forEach((a) =>
+        a.addEventListener('click', () => atualizarTitulo(a.dataset.alvo)));
+
+    // Se veio pelo botão "Criar conta" (cliente.html?aba=cadastro), já abre essa aba
+    if (new URLSearchParams(location.search).get('aba') === 'cadastro') {
+        ativarAba('painelCadastro');
+        atualizarTitulo('painelCadastro');
+    }
+
+    // ---------- Login ----------
+    formLogin.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const resultado = await enviarFormulario(formLogin, '/clientes/login', mensagemLogin);
+        if (resultado) {
+            localStorage.setItem('clienteLogado', JSON.stringify(resultado.cliente));
+            setTimeout(() => (window.location.href = 'index.html'), 700); // volta pra tela inicial
+        }
+    });
+
+    // ---------- Cadastro ----------
+    formCadastro.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!senhasIguais(formCadastro, mensagemCadastro)) return;
+
+        const email = formCadastro.email.value;
+        const resultado = await enviarFormulario(formCadastro, '/clientes/cadastro', mensagemCadastro);
+        if (resultado) {
+            // Cadastrou: vai para a aba Entrar com o e-mail já preenchido
+            formCadastro.reset();
+            setTimeout(() => {
+                ativarAba('painelLogin');
+                atualizarTitulo('painelLogin');
+                document.getElementById('loginEmail').value = email;
+                document.getElementById('loginSenha').focus();
+                mostrarMensagem(mensagemLogin, 'Conta criada! Agora é só digitar sua senha.', 'sucesso');
+            }, 900);
+        }
+    });
+</script>
+
+</body>
+</html>
