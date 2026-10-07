@@ -19,7 +19,7 @@ jobs:
           github-token: ${{ secrets.PROJECT_TOKEN }}
           script: |
             const ORG = context.repo.owner;
-            const PROJECT_NUMBER = 3;
+            const PROJECT_NUMBER = 1;
             const LABEL = 'aguardando-assignee-branch';
             const MARKER = '<!-- check-assignee-branch-bot -->';
 
