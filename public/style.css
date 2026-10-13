@@ -22,7 +22,9 @@
 * { box-sizing: border-box; }
 
 body 
-.beneficios li span.material-symbols-outlined {
+
+.beneficios li span.material-symbols-outlined 
+{
     width: 30px; 
     height: 30px; 
     border-radius: 50%;
