@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do parceiro — EcoFood</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos só desta tela */
+        .painel-pagina { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+        .painel-topo { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+        .painel-topo h1 { font-size: 40px; margin: 0; }
+
+        .numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+        .numero-card { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--raio); padding: 20px; }
+        .numero-card small { color: var(--texto-suave); }
+        .numero-card .valor { font-family: 'DM Serif Display', Georgia, serif; font-size: 36px; color: var(--verde); }
+        .numero-card.destaque { background: var(--verde); border-color: var(--verde); color: #fff; }
+        .numero-card.destaque small { color: rgba(255,255,255,.8); }
+        .numero-card.destaque .valor { color: #f3a466; }
+
+        .colunas { display: grid; grid-template-columns: 360px 1fr; gap: 24px; align-items: start; }
+        .bloco { background: var(--cartao); border: 1px solid var(--borda); border-radius: var(--raio); padding: 24px; }
+        .bloco h2 { font-size: 24px; margin: 0 0 16px; }
+
+        .oferta { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--borda); }
+        .oferta:last-child { border-bottom: none; }
+        .oferta .icone { width: 46px; height: 46px; border-radius: 12px; background: var(--verde-claro); display: grid; place-items: center; font-size: 22px; }
+        .oferta .dados { flex: 1; }
+        .oferta strong { display: block; }
+        .oferta small { color: var(--texto-suave); }
+        .remover { background: none; border: none; color: var(--texto-suave); cursor: pointer; font-size: 13px; }
+        .remover:hover { color: var(--erro); }
+        .vazio { text-align: center; color: var(--texto-suave); padding: 30px 0; }
+        .vazio div { font-size: 40px; }
+
+        @media (max-width: 900px) { .colunas { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<header class="topo">
+    <div class="topo-conteudo" style="justify-content: space-between;">
+        <a href="index.html" class="logo">EcoFood <small style="font-size:13px;color:var(--laranja)">parceiro</small></a>
+        <div class="usuario">
+            <div class="avatar" id="avatar"></div>
+            <span class="link-sair" id="sair">Sair</span>
+        </div>
+    </div>
+</header>
+
+<main class="painel-pagina">
+    <div class="painel-topo">
+        <div>
+            <p class="saudacao">Painel do restaurante</p>
+            <h1 id="nomeRestaurante">Restaurante</h1>
+        </div>
+        <a href="index.html" class="botao contorno pequeno">Ver site como cliente</a>
+    </div>
+
+    <div class="numeros">
+        <div class="numero-card"><small>Ofertas ativas</small><div class="valor" id="qtdOfertas">0</div></div>
+        <div class="numero-card"><small>Itens disponíveis</small><div class="valor" id="qtdItens">0</div></div>
+        <div class="numero-card destaque"><small>Comida salva do lixo</small><div class="valor" id="kgSalvos">0 kg</div></div>
+    </div>
+
+    <div class="colunas">
+        <!-- Nova oferta -->
+        <div class="bloco">
+            <h2>Nova oferta</h2>
+            <form id="formOferta">
+                <div class="campo">
+                    <label for="nomeProduto">Nome do prato</label>
+                    <input type="text" id="nomeProduto" placeholder="Ex.: Marmita de frango" required>
+                </div>
+                <div class="linha">
+                    <div class="campo">
+                        <label for="precoDe">Preço normal</label>
+                        <input type="number" id="precoDe" step="0.01" min="0" placeholder="30,00" required>
+                    </div>
+                    <div class="campo">
+                        <label for="precoPor">Preço EcoFood</label>
+                        <input type="number" id="precoPor" step="0.01" min="0" placeholder="14,90" required>
+                    </div>
+                </div>
+                <div class="linha">
+                    <div class="campo">
+                        <label for="quantidade">Quantidade</label>
+                        <input type="number" id="quantidade" min="1" value="1" required>
+                    </div>
+                    <div class="campo">
+                        <label for="retirada">Retirar até</label>
+                        <input type="time" id="retirada" value="20:00" required>
+                    </div>
+                </div>
+                <button type="submit" class="botao laranja cheio">Publicar oferta</button>
+            </form>
+            <div id="mensagemOferta" class="mensagem"></div>
+        </div>
+
+        <!-- Lista de ofertas -->
+        <div class="bloco">
+            <h2>Suas ofertas de hoje</h2>
+            <div id="listaOfertas"></div>
+        </div>
+    </div>
+</main>
+
+<script src="auth.js"></script>
+<script>
+    // ---------------------------------------------------------
+    // 1) Proteção da página: só entra quem fez login
+    // ---------------------------------------------------------
+    let restaurante = null;
+    try { restaurante = JSON.parse(localStorage.getItem('restauranteLogado')); } catch {}
+
+    if (!restaurante) {
+        // Não está logado -> volta para a tela de login do restaurante
+        window.location.href = 'restaurante.html';
+        throw new Error('Restaurante não logado'); // para o resto do código aqui
+    }
+
+    // ---------------------------------------------------------
+    // 2) Mostra os dados do restaurante logado
+    // ---------------------------------------------------------
+    document.getElementById('nomeRestaurante').innerText = restaurante.nome_restaurante;
+    document.getElementById('avatar').innerText = iniciais(restaurante.nome_restaurante);
+
+    document.getElementById('sair').addEventListener('click', () => {
+        localStorage.removeItem('restauranteLogado');
+        window.location.href = 'restaurante.html';
+    });
+
+    // ---------------------------------------------------------
+    // 3) Ofertas — agora salvas no MySQL pelo servidor
+    // ---------------------------------------------------------
+    let ofertas = [];
+    const real = (v) => Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    // Busca no servidor as ofertas DESTE restaurante
+    async function carregarOfertas() {
+        const resposta = await fetch(`/restaurantes/${restaurante.id}/ofertas`);
+        ofertas = await resposta.json();
+        mostrarOfertas();
+    }
+
+    function mostrarOfertas() {
+        const lista = document.getElementById('listaOfertas');
+
+        if (ofertas.length === 0) {
+            lista.innerHTML = `<div class="vazio"><div>🍽️</div>Nenhuma oferta ainda.<br>Publique a primeira ao lado!</div>`;
+        } else {
+            lista.innerHTML = ofertas.map((o) => `
+                <div class="oferta">
+                    <div class="icone">🥡</div>
+                    <div class="dados">
+                        <strong>${o.nome}</strong>
+                        <small><s>${real(o.preco_de)}</s> → <b style="color:var(--verde)">${real(o.preco_por)}</b>
+                        · ${o.quantidade} un. · retirar até ${o.retirar_ate.slice(0, 5)}</small>
+                    </div>
+                    <button class="remover" data-id="${o.id}">Remover</button>
+                </div>`).join('');
+        }
+
+        // Números do topo
+        const itens = ofertas.reduce((soma, o) => soma + Number(o.quantidade), 0);
+        document.getElementById('qtdOfertas').innerText = ofertas.length;
+        document.getElementById('qtdItens').innerText = itens;
+        document.getElementById('kgSalvos').innerText = (itens * 0.4).toFixed(1).replace('.', ',') + ' kg'; // ~400g por prato
+    }
+
+    // Publicar oferta -> POST /ofertas
+    document.getElementById('formOferta').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = document.getElementById('mensagemOferta');
+
+        const oferta = {
+            restaurante_id: restaurante.id,
+            nome: document.getElementById('nomeProduto').value,
+            preco_de: document.getElementById('precoDe').value,
+            preco_por: document.getElementById('precoPor').value,
+            quantidade: document.getElementById('quantidade').value,
+            retirar_ate: document.getElementById('retirada').value
+        };
+
+        const resposta = await fetch('/ofertas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(oferta)
+        });
+        const resultado = await resposta.json();
+
+        if (resposta.ok) {
+            mostrarMensagem(msg, resultado.mensagem, 'sucesso');
+            e.target.reset();
+            carregarOfertas(); // atualiza a lista
+        } else {
+            mostrarMensagem(msg, resultado.erro, 'erro');
+        }
+    });
+
+    // Remover oferta -> DELETE /ofertas/:id
+    document.getElementById('listaOfertas').addEventListener('click', async (e) => {
+        if (!e.target.classList.contains('remover')) return;
+
+        await fetch(`/ofertas/${e.target.dataset.id}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ restaurante_id: restaurante.id })
+        });
+        carregarOfertas();
+    });
+
+    carregarOfertas();
+</script>
+
+</body>
+</html>
