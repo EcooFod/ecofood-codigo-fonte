@@ -21,7 +21,18 @@
 
 * { box-sizing: border-box; }
 
-body {
+.beneficios li span.material-symbols-outlined {
+    width: 30px; 
+    height: 30px; 
+    border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    display: grid; 
+    place-items: center; 
+    font-size: 18px;
+    color: #fff; /* Cor do ícone */
+}
+body 
+{
     margin: 0;
     font-family: 'DM Sans', Arial, sans-serif;
     background: var(--fundo);
