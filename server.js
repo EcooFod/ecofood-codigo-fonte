@@ -28,9 +28,7 @@ db.connect((err) => {
 
 // --- ROTA DE CADASTRO COM LOG NO TERMINAL ---
 app.post('/api/clientes/cadastro', async (req, res) => {
-  
-  
-    console.log('RECEBI UM PEDIDO DE CADASTRO:', req.body);//terminal aparecer 
+    console.log('RECEBI UM PEDIDO DE CADASTRO:', req.body);
 
     const { nome, email, telefone, senha } = req.body;
 
@@ -58,10 +56,38 @@ app.post('/api/clientes/cadastro', async (req, res) => {
     }
 });
 
+// --- ROTA DE LOGIN ---
 app.post('/api/clientes/login', (req, res) => {
     console.log('RECEBI UM PEDIDO DE LOGIN:', req.body);
-    // ... restante codigo de login ...
-    res.json({ mensagem: 'Ok' });
+    
+    const { email, senha } = req.body;
+
+    if (!email || !senha) {
+        return res.status(400).json({ erro: 'Preencha o e-mail e a senha!' });
+    }
+
+    const sql = `SELECT * FROM clientes WHERE email = ?`;
+    db.query(sql, [email], async (err, resultados) => {
+        if (err) {
+            console.error('Erro no MySQL:', err.message);
+            return res.status(500).json({ erro: 'Erro interno no servidor.' });
+        }
+
+        if (resultados.length === 0) {
+            return res.status(400).json({ erro: 'E-mail ou senha incorretos!' });
+        }
+
+        const cliente = resultados[0];
+        const senhaCorreta = await bcrypt.compare(senha, cliente.senha);
+
+        if (!senhaCorreta) {
+            return res.status(400).json({ erro: 'E-mail ou senha incorretos!' });
+        }
+
+        // Remove a senha antes de enviar os dados do cliente de volta
+        delete cliente.senha;
+        res.json({ mensagem: 'Login realizado com sucesso!', cliente });
+    });
 });
 
 app.listen(PORT, () => {

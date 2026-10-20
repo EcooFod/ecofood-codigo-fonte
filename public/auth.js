@@ -25,6 +25,7 @@ function mostrarMensagem(elemento, texto, tipo) {
 }
 
 // ---------- Envio de formulário para o servidor ----------
+// Pega todos os campos (pelo atributo name) e manda como JSON
 async function enviarFormulario(form, url, elementoMensagem) {
     const dados = Object.fromEntries(new FormData(form));
     const botao = form.querySelector('button[type="submit"]');
@@ -61,6 +62,7 @@ function senhasIguais(form, elementoMensagem) {
 }
 
 // ---------- Quem está logado ----------
+// Por enquanto guardamos no navegador (localStorage).
 function pegarCliente() {
     try { return JSON.parse(localStorage.getItem('clienteLogado')); }
     catch { return null; }

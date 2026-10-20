@@ -120,7 +120,7 @@
         const resultado = await enviarFormulario(formLogin, '/api/clientes/login', mensagemLogin);
         if (resultado) {
             localStorage.setItem('clienteLogado', JSON.stringify(resultado.cliente));
-            setTimeout(() => (window.location.href = 'index.html'), 700); // volta pra tela inicial
+            setTimeout(() => (window.location.href = 'index.html'), 700);
         }
     });
 
@@ -132,7 +132,6 @@
         const email = formCadastro.email.value;
         const resultado = await enviarFormulario(formCadastro, '/api/clientes/cadastro', mensagemCadastro);
         if (resultado) {
-            // Cadastrou: vai para a aba Entrar com o e-mail já preenchido
             formCadastro.reset();
             setTimeout(() => {
                 ativarAba('painelLogin');
