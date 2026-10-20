@@ -25,7 +25,10 @@ function mostrarMensagem(elemento, texto, tipo) {
 }
 
 // ---------- Envio de formulário para o servidor ----------
+<<<<<<< HEAD
 // Pega todos os campos (pelo atributo name) e manda como JSON
+=======
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
 async function enviarFormulario(form, url, elementoMensagem) {
     const dados = Object.fromEntries(new FormData(form));
     const botao = form.querySelector('button[type="submit"]');
@@ -46,7 +49,11 @@ async function enviarFormulario(form, url, elementoMensagem) {
         mostrarMensagem(elementoMensagem, resultado.erro, 'erro');
     } catch (erro) {
         mostrarMensagem(elementoMensagem,
+<<<<<<< HEAD
             'Não foi possível conectar. Tente novamente.', 'erro');
+=======
+            'Não consegui falar com o servidor. Ele está rodando (node server.js)?', 'erro');
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
     } finally {
         botao.disabled = false;
     }
@@ -62,8 +69,11 @@ function senhasIguais(form, elementoMensagem) {
 }
 
 // ---------- Quem está logado ----------
+<<<<<<< HEAD
 // Por enquanto guardamos no navegador (localStorage).
 // Mais pra frente dá para trocar por sessão/token no servidor.
+=======
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
 function pegarCliente() {
     try { return JSON.parse(localStorage.getItem('clienteLogado')); }
     catch { return null; }
@@ -76,4 +86,8 @@ function sairCliente() {
 
 function iniciais(nome) {
     return nome.trim().split(/\s+/).slice(0, 2).map((p) => p[0].toUpperCase()).join('');
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))

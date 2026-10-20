@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início — EcoFood</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= CABEÇALHO ================= -->
+<header class="topo">
+    <div class="topo-conteudo">
+        <a href="index.html" class="logo">EcoFood</a>
+
+        <label class="busca">
+            🔍 <input type="text" id="busca" placeholder="Buscar restaurantes ou produtos...">
+        </label>
+
+        <nav class="menu">
+            <a href="index.html" class="ativo">Home</a>
+            <a href="#destaques">Ofertas</a>
+            <a href="#">Mapa</a>
+            <a href="restaurante.html">Seja parceiro</a>
+        </nav>
+
+        <!-- Preenchido pelo JavaScript: botão "Entrar" ou avatar do cliente -->
+        <div id="areaUsuario"></div>
+    </div>
+</header>
+
+<!-- ================= CONTEÚDO ================= -->
+<main class="pagina">
+    <section>
+        <p class="saudacao" id="saudacao">Olá! 👋</p>
+        <h1 class="titulo-grande">O que salvar hoje?</h1>
+
+        <div class="banner">
+            <span class="selo">🔥 Hoje até 20h</span>
+            <h2>Salve 3 itens e ganhe<br><span>um brinde 🎁</span></h2>
+            <p>Restaurantes próximos com ofertas imperdíveis.</p>
+        </div>
+
+        <div class="chips" id="chips">
+            <button class="chip ativo" data-categoria="todos">Todos</button>
+            <button class="chip" data-categoria="carnes">Carnes</button>
+            <button class="chip" data-categoria="brasil">Brasileira</button>
+            <button class="chip" data-categoria="refeicoes">Refeições</button>
+            <button class="chip" data-categoria="marmitas">Marmitas</button>
+            <button class="chip" data-categoria="padaria">Padaria</button>
+        </div>
+
+        <div class="secao-topo" id="destaques">
+            <h2>Em destaque</h2>
+            <a href="#">Ver todos →</a>
+        </div>
+        <div class="grade" id="gradeProdutos"></div>
+    </section>
+
+    <aside class="lateral">
+        <h3>Próximos a você</h3>
+        <div class="loja">
+            <div class="icone">🥬</div>
+            <div><strong>HortiFruti Central</strong><small>📍 220 m · ⏱ 4 min · ★ 4.5</small><br><span class="tag">Aberto</span></div>
+        </div>
+        <div class="loja">
+            <div class="icone">🍃</div>
+            <div><strong>Bistrô Verde</strong><small>📍 340 m · ⏱ 7 min · ★ 4.7</small><br><span class="tag laranja">Fecha 19h</span></div>
+        </div>
+        <div class="loja">
+            <div class="icone">🥖</div>
+            <div><strong>Padaria Sucesso</strong><small>📍 700 m · ⏱ 12 min · ★ 4.4</small><br><span class="tag">Aberto</span></div>
+        </div>
+
+        <div class="impacto">
+            <small>Impacto da comunidade</small>
+            <div class="numero">1.240</div>
+            <small>refeições salvas</small>
+            <hr>
+            <div class="numero laranja">310kg</div>
+            <small>CO₂ evitado</small>
+        </div>
+
+        <div class="parceiro-card">
+            <strong>Tem um restaurante?</strong>
+            <p>Venda o excedente do dia em vez de jogar fora.</p>
+            <a href="restaurante.html" class="botao laranja pequeno">Quero ser parceiro</a>
+        </div>
+    </aside>
+</main>
+
+<!-- ================= MODAL: precisa entrar ================= -->
+<div class="fundo-modal" id="modalLogin">
+    <div class="modal">
+        <div class="emoji">🥡</div>
+        <h2>Quase lá!</h2>
+        <p>Para reservar <b id="nomeProdutoModal">esse item</b>, entre na sua conta ou crie uma rapidinho.</p>
+        <a href="cliente.html" class="botao cheio">Entrar</a>
+        <a href="cliente.html?aba=cadastro" class="botao contorno cheio">Criar conta</a>
+        <br><a href="#" class="voltar" id="fecharModal">Agora não</a>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="auth.js"></script>
+<script>
+    // ---------------------------------------------------------
+    // Produtos: vêm do banco (tabela "ofertas") pela rota GET /ofertas
+    // ---------------------------------------------------------
+    let produtos = [];
+
+    async function carregarProdutos() {
+        try {
+            const resposta = await fetch('/ofertas');
+            const ofertas = await resposta.json();
+
+            // Converte o formato do banco para o formato que os cartões usam
+            produtos = ofertas.map((o) => ({
+                nome: o.nome,
+                restaurante: o.nome_restaurante,
+                categoria: 'todos',       // quando tiver categoria na tabela, troque aqui
+                emoji: '🥡',
+                de: Number(o.preco_de),
+                por: Number(o.preco_por),
+                imagem: ''
+            }));
+        } catch (erro) {
+            produtos = [];
+        }
+        mostrarProdutos();
+    }
+
+    const cliente = pegarCliente();
+    const grade = document.getElementById('gradeProdutos');
+    let categoriaAtual = 'todos';
+
+    // ---------- Cabeçalho: logado ou não ----------
+    const areaUsuario = document.getElementById('areaUsuario');
+    if (cliente) {
+        areaUsuario.innerHTML = `
+            <div class="usuario">
+                <div class="avatar" title="${cliente.nome}">${iniciais(cliente.nome)}</div>
+                <span class="link-sair" onclick="sairCliente()">Sair</span>
+            </div>`;
+        document.getElementById('saudacao').innerText = `Olá, ${cliente.nome.split(' ')[0]} 👋`;
+    } else {
+        areaUsuario.innerHTML = `<a href="cliente.html" class="botao pequeno">Entrar</a>`;
+    }
+
+    // ---------- Monta os cartões de produto ----------
+    const real = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    function mostrarProdutos() {
+        const termo = document.getElementById('busca').value.toLowerCase();
+        const lista = produtos.filter((p) =>
+            (categoriaAtual === 'todos' || p.categoria === categoriaAtual) &&
+            (p.nome + ' ' + p.restaurante).toLowerCase().includes(termo)
+        );
+
+        if (lista.length === 0) {
+            grade.innerHTML = '<p style="color:var(--texto-suave)">Nenhuma oferta por aqui ainda 😕</p>';
+            return;
+        }
+
+        grade.innerHTML = lista.map((p) => {
+            const off = Math.round((1 - p.por / p.de) * 100);
+            const foto = p.imagem ? `<img src="${p.imagem}" alt="${p.nome}">` : p.emoji;
+            return `
+                <article class="produto">
+                    <div class="foto">${foto}<span class="desconto">-${off}%</span></div>
+                    <div class="info">
+                        <h3>${p.nome}</h3>
+                        <span class="restaurante">${p.restaurante}</span>
+                        <div class="precos">
+                            <div>
+                                <div class="preco-antigo">${real(p.de)}</div>
+                                <div class="preco">${real(p.por)}</div>
+                            </div>
+                            <button class="btn-add" data-nome="${p.nome}" title="Reservar">+</button>
+                        </div>
+                    </div>
+                </article>`;
+        }).join('');
+    }
+
+    // ---------- Clique no "+" ----------
+    grade.addEventListener('click', (e) => {
+        const botao = e.target.closest('.btn-add');
+        if (!botao) return;
+
+        if (!pegarCliente()) {
+            // Não está logado: pede para entrar/cadastrar
+            document.getElementById('nomeProdutoModal').innerText = botao.dataset.nome;
+            document.getElementById('modalLogin').classList.add('aberto');
+            return;
+        }
+        mostrarToast(`${botao.dataset.nome} reservado! ✅`);
+    });
+
+    document.getElementById('fecharModal').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('modalLogin').classList.remove('aberto');
+    });
+
+    // ---------- Filtros ----------
+    document.getElementById('chips').addEventListener('click', (e) => {
+        const chip = e.target.closest('.chip');
+        if (!chip) return;
+        document.querySelectorAll('.chip').forEach((c) => c.classList.remove('ativo'));
+        chip.classList.add('ativo');
+        categoriaAtual = chip.dataset.categoria;
+        mostrarProdutos();
+    });
+    document.getElementById('busca').addEventListener('input', mostrarProdutos);
+
+    function mostrarToast(texto) {
+        const t = document.getElementById('toast');
+        t.innerText = texto;
+        t.classList.add('visivel');
+        setTimeout(() => t.classList.remove('visivel'), 2500);
+    }
+
+    carregarProdutos();
+</script>
+
+</body>
+</html>

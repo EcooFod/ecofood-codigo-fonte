@@ -8,41 +8,39 @@
 </head>
 <body>
 
-<div class="login-cliente">
-    <!-- Barra lateral -->
-    <div class="lateral-esquerda">
+<div class="tela-auth">
+    <!-- Lado verde -->
+    <div class="auth-lado">
         <a href="index.html" class="logo">EcoFood</a>
         <div>
-            <h1>Comida boa<br>por<span> menos.</span></h1>
-            <p>Reserve pratos de restaurantes perto de você com até 60% de desconto.</p>
+            <h1>Comida boa<br>não vai pro <span>lixo.</span></h1>
+            <p>Reserve pratos de restaurantes perto de você com até 60% de desconto e ajude a diminuir o desperdício.</p>
             <ul class="beneficios">
-                <li>Preços bem mais baratos</li>
-                <li>Restaurantes perto de você</li>
-                <li>Apoie restaurantes do seu bairro</li>
-                <li>Reserve em poucos cliques</li>
+                <li><span>💸</span> Preços bem mais baratos</li>
+                <li><span>📍</span> Restaurantes perto de você</li>
+                <li><span>🌱</span> Menos comida desperdiçada</li>
             </ul>
         </div>
         <div class="rodape">Projeto Integrador · ADS</div>
     </div>
 
-    <!-- LOGIN -->
-
-    <div class="area-login">
-        <div class="caixa-login">
-            <h2 id="titulologin">Bem-vindo de volta</h2>
+    <!-- Formulários -->
+    <div class="auth-form">
+        <div class="caixa-form">
+            <h2 id="tituloForm">Bem-vindo de volta</h2>
             <p class="sub" id="subForm">Entre para reservar suas ofertas.</p>
 
-            <div class="entrar-criar">
+            <div class="abas">
                 <button class="aba ativa" data-alvo="painelLogin">Entrar</button>
                 <button class="aba" data-alvo="painelCadastro">Criar conta</button>
             </div>
 
-            
+            <!-- LOGIN -->
             <div id="painelLogin" class="painel">
                 <form id="formLogin">
                     <div class="campo">
                         <label for="loginEmail">E-mail</label>
-                        <input type="email" id="loginEmail" name="email" placeholder="email@email.com" required>
+                        <input type="email" id="loginEmail" name="email" placeholder="voce@email.com" required>
                     </div>
                     <div class="campo">
                         <label for="loginSenha">Senha</label>
@@ -102,7 +100,7 @@
     // Troca título conforme a aba
     function atualizarTitulo(aba) {
         const cadastro = aba === 'painelCadastro';
-        document.getElementById('titulologin').innerText = cadastro ? 'Crie sua conta' : 'Bem-vindo de volta';
+        document.getElementById('tituloForm').innerText = cadastro ? 'Crie sua conta' : 'Bem-vindo de volta';
         document.getElementById('subForm').innerText = cadastro
             ? 'Leva menos de um minuto.'
             : 'Entre para reservar suas ofertas.';

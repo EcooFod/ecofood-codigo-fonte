@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seja parceiro — EcoFood</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="tela-auth">
+    <!-- Lado verde -->
+    <div class="auth-lado">
+        <a href="index.html" class="logo">EcoFood</a>
+        <div>
+            <h1>Transforme sobra<br>em <span>faturamento.</span></h1>
+            <p>Seja um restaurante parceiro do EcoFood: venda a comida excedente ou perto do vencimento para clientes da sua região.</p>
+            <ul class="beneficios">
+                <li><span>💰</span> Receita extra com o que iria pro lixo</li>
+                <li><span>👥</span> Novos clientes todos os dias</li>
+                <li><span>🌱</span> Selo de restaurante sustentável</li>
+            </ul>
+        </div>
+        <div class="rodape">Projeto Integrador · ADS</div>
+    </div>
+
+    <!-- Formulários -->
+    <div class="auth-form">
+        <div class="caixa-form">
+            <h2 id="tituloForm">Seja um parceiro</h2>
+            <p class="sub" id="subForm">Cadastre seu restaurante em poucos passos.</p>
+
+            <div class="abas">
+                <button class="aba ativa" data-alvo="painelCadastro">Quero ser parceiro</button>
+                <button class="aba" data-alvo="painelLogin">Já sou parceiro</button>
+            </div>
+
+            <!-- CADASTRO -->
+            <div id="painelCadastro" class="painel">
+                <form id="formCadastro">
+                    <div class="campo">
+                        <label for="nomeRestaurante">Nome do restaurante</label>
+                        <input type="text" id="nomeRestaurante" name="nome_restaurante" placeholder="Ex.: Bistrô Verde" required>
+                    </div>
+                    <div class="linha">
+                        <div class="campo">
+                            <label for="cnpj">CNPJ</label>
+                            <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" maxlength="18" required>
+                        </div>
+                        <div class="campo">
+                            <label for="responsavel">Responsável</label>
+                            <input type="text" id="responsavel" name="responsavel" placeholder="Seu nome" required>
+                        </div>
+                    </div>
+                    <div class="linha">
+                        <div class="campo">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" name="email" placeholder="contato@..." required>
+                        </div>
+                        <div class="campo">
+                            <label for="telefone">Telefone</label>
+                            <input type="tel" id="telefone" name="telefone" placeholder="(62) 3333-3333">
+                        </div>
+                    </div>
+                    <div class="campo">
+                        <label for="endereco">Endereço</label>
+                        <input type="text" id="endereco" name="endereco" placeholder="Rua, número, bairro, cidade" required>
+                    </div>
+                    <div class="linha">
+                        <div class="campo">
+                            <label for="senha">Senha</label>
+                            <input type="password" id="senha" name="senha" placeholder="Mín. 6 caracteres" minlength="6" required>
+                        </div>
+                        <div class="campo">
+                            <label for="confirmarSenha">Confirmar senha</label>
+                            <input type="password" id="confirmarSenha" name="confirmar_senha" placeholder="Repita a senha" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="botao laranja cheio">Cadastrar restaurante</button>
+                </form>
+                <div id="mensagemCadastro" class="mensagem"></div>
+            </div>
+
+            <!-- LOGIN -->
+            <div id="painelLogin" class="painel escondido">
+                <form id="formLogin">
+                    <div class="campo">
+                        <label for="loginEmail">E-mail do restaurante</label>
+                        <input type="email" id="loginEmail" name="email" placeholder="contato@..." required>
+                    </div>
+                    <div class="campo">
+                        <label for="loginSenha">Senha</label>
+                        <input type="password" id="loginSenha" name="senha" placeholder="Sua senha" required>
+                    </div>
+                    <button type="submit" class="botao cheio">Entrar no painel</button>
+                </form>
+                <div id="mensagemLogin" class="mensagem"></div>
+            </div>
+
+            <a class="voltar" href="index.html">← Voltar para a página inicial</a>
+        </div>
+    </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+    configurarAbas();
+
+    const formLogin = document.getElementById('formLogin');
+    const formCadastro = document.getElementById('formCadastro');
+    const mensagemLogin = document.getElementById('mensagemLogin');
+    const mensagemCadastro = document.getElementById('mensagemCadastro');
+
+    function atualizarTitulo(aba) {
+        const login = aba === 'painelLogin';
+        document.getElementById('tituloForm').innerText = login ? 'Bem-vindo, parceiro' : 'Seja um parceiro';
+        document.getElementById('subForm').innerText = login
+            ? 'Entre para gerenciar suas ofertas.'
+            : 'Cadastre seu restaurante em poucos passos.';
+    }
+    document.querySelectorAll('.aba').forEach((a) =>
+        a.addEventListener('click', () => atualizarTitulo(a.dataset.alvo)));
+
+    // Máscara do CNPJ: coloca pontos, barra e traço enquanto digita
+    document.getElementById('cnpj').addEventListener('input', (e) => {
+        let v = e.target.value.replace(/\D/g, '').slice(0, 14);
+        v = v.replace(/^(\d{2})(\d)/, '$1.$2')
+             .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+             .replace(/\.(\d{3})(\d)/, '.$1/$2')
+             .replace(/(\d{4})(\d)/, '$1-$2');
+        e.target.value = v;
+    });
+
+    // ---------- Cadastro ----------
+    formCadastro.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!senhasIguais(formCadastro, mensagemCadastro)) return;
+
+        const email = formCadastro.email.value;
+        const resultado = await enviarFormulario(formCadastro, '/restaurantes/cadastro', mensagemCadastro);
+        if (resultado) {
+            formCadastro.reset();
+            setTimeout(() => {
+                ativarAba('painelLogin');
+                atualizarTitulo('painelLogin');
+                document.getElementById('loginEmail').value = email;
+                document.getElementById('loginSenha').focus();
+                mostrarMensagem(mensagemLogin, 'Restaurante cadastrado! Agora é só digitar sua senha.', 'sucesso');
+            }, 900);
+        }
+    });
+
+    // ---------- Login ----------
+    formLogin.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const resultado = await enviarFormulario(formLogin, '/restaurantes/login', mensagemLogin);
+        if (resultado) {
+            localStorage.setItem('restauranteLogado', JSON.stringify(resultado.restaurante));
+            // Espera um pouquinho para mostrar a mensagem e vai para o painel
+            setTimeout(() => (window.location.href = 'painel-restaurante.html'), 700);
+        }
+    });
+</script>
+
+</body>
+</html>

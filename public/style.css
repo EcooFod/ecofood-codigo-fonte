@@ -21,6 +21,7 @@
 
 * { box-sizing: border-box; }
 
+<<<<<<< HEAD
 .beneficios li span.material-symbols-outlined {
     width: 30px; 
     height: 30px; 
@@ -33,6 +34,9 @@
 }
 body 
 {
+=======
+body {
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
     margin: 0;
     font-family: 'DM Sans', Arial, sans-serif;
     background: var(--fundo);
@@ -313,12 +317,20 @@ a { color: inherit; text-decoration: none; }
 .toast.visivel { transform: translateX(-50%) translateY(0); }
 
 /* ---------- Telas de login / cadastro ---------- */
+<<<<<<< HEAD
 .login-cliente {
+=======
+.tela-auth {
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
     min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
 }
+<<<<<<< HEAD
 .lateral-esquerda {
+=======
+.auth-lado {
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
     background: var(--verde);
     color: #fff;
     padding: 48px;
@@ -328,7 +340,11 @@ a { color: inherit; text-decoration: none; }
     position: relative;
     overflow: hidden;
 }
+<<<<<<< HEAD
 .lateral-esquerda::after {
+=======
+.auth-lado::after {
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
     content: '';
     position: absolute;
     right: -120px; bottom: -120px;
@@ -336,10 +352,17 @@ a { color: inherit; text-decoration: none; }
     border-radius: 50%;
     background: rgba(255,255,255,.06);
 }
+<<<<<<< HEAD
 .lateral-esquerda .logo { color: #fff; }
 .lateral-esquerda h1 { font-size: 46px; line-height: 1.1; margin: 0 0 16px; }
 .lateral-esquerda h1 span { color: #f3a466; }
 .lateral-esquerda p { opacity: .85; max-width: 420px; line-height: 1.5; }
+=======
+.auth-lado .logo { color: #fff; }
+.auth-lado h1 { font-size: 46px; line-height: 1.1; margin: 0 0 16px; }
+.auth-lado h1 span { color: #f3a466; }
+.auth-lado p { opacity: .85; max-width: 420px; line-height: 1.5; }
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
 .beneficios { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 12px; }
 .beneficios li { display: flex; gap: 10px; align-items: center; }
 .beneficios li span {
@@ -347,19 +370,33 @@ a { color: inherit; text-decoration: none; }
     background: rgba(255,255,255,.12);
     display: grid; place-items: center; font-size: 15px;
 }
+<<<<<<< HEAD
 .lateral-esquerda .rodape { font-size: 13px; opacity: .7; }
 
 .area-login {
+=======
+.auth-lado .rodape { font-size: 13px; opacity: .7; }
+
+.auth-form {
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 40px 24px;
 }
+<<<<<<< HEAD
 .caixa-login { width: 100%; max-width: 420px; }
 .caixa-login h2 { font-size: 32px; margin: 0 0 6px; }
 .caixa-login .sub { color: var(--texto-suave); margin: 0 0 24px; }
 
 .entrar-criar {
+=======
+.caixa-form { width: 100%; max-width: 420px; }
+.caixa-form h2 { font-size: 32px; margin: 0 0 6px; }
+.caixa-form .sub { color: var(--texto-suave); margin: 0 0 24px; }
+
+.abas {
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
     display: flex;
     background: #efe7db;
     border-radius: 999px;
@@ -408,9 +445,16 @@ a { color: inherit; text-decoration: none; }
     .pagina { grid-template-columns: 1fr; }
     .menu, .busca { display: none; }
     .topo-conteudo { justify-content: space-between; }
+<<<<<<< HEAD
     .login-cliente { grid-template-columns: 1fr; }
     .lateral-esquerda { padding: 32px 24px; }
     .lateral-esquerda h1 { font-size: 34px; }
     .lateral-esquerda .rodape, .beneficios { display: none; }
+=======
+    .tela-auth { grid-template-columns: 1fr; }
+    .auth-lado { padding: 32px 24px; }
+    .auth-lado h1 { font-size: 34px; }
+    .auth-lado .rodape, .beneficios { display: none; }
+>>>>>>> 3a0f25a (feat: implementa backend de cadastro e login de cliente (#7))
     .titulo-grande { font-size: 34px; }
 }
