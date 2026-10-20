@@ -84,7 +84,6 @@ app.post('/api/clientes/login', (req, res) => {
             return res.status(400).json({ erro: 'E-mail ou senha incorretos!' });
         }
 
-        // Remove a senha antes de enviar os dados do cliente de volta
         delete cliente.senha;
         res.json({ mensagem: 'Login realizado com sucesso!', cliente });
     });
