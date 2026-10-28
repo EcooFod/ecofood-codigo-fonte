@@ -137,7 +137,8 @@
         if (!senhasIguais(formCadastro, mensagemCadastro)) return;
 
         const email = formCadastro.email.value;
-        const resultado = await enviarFormulario(formCadastro, '/restaurantes/cadastro', mensagemCadastro);
+        // Rota corrigida com /api na frente para bater certinho com o server.js
+        const resultado = await enviarFormulario(formCadastro, '/api/restaurantes/cadastro', mensagemCadastro);
         if (resultado) {
             formCadastro.reset();
             setTimeout(() => {
@@ -153,10 +154,10 @@
     // ---------- Login ----------
     formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const resultado = await enviarFormulario(formLogin, '/restaurantes/login', mensagemLogin);
+        // Rota corrigida com /api na frente
+        const resultado = await enviarFormulario(formLogin, '/api/restaurantes/login', mensagemLogin);
         if (resultado) {
             localStorage.setItem('restauranteLogado', JSON.stringify(resultado.restaurante));
-            // Espera um pouquinho para mostrar a mensagem e vai para o painel
             setTimeout(() => (window.location.href = 'painel-restaurante.html'), 700);
         }
     });
