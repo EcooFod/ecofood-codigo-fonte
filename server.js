@@ -92,3 +92,21 @@ app.post('/api/clientes/login', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor a rodar em http://localhost:${PORT}`);
 });
+
+// Rota para buscar as ofertas cadastradas no banco de dados
+app.get('/ofertas', (req, res) => {
+    const query = `
+        SELECT ofertas.*, restaurantes.nome_restaurante 
+        FROM ofertas 
+        JOIN restaurantes ON ofertas.restaurante_id = restaurantes.id
+    `;
+    
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error("Erro ao buscar ofertas:", err);
+            return res.status(500).json({ error: err.message });
+        }
+        res.json(results);
+    });
+});
+

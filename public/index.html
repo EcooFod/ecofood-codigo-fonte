@@ -55,6 +55,67 @@
             <a href="#">Ver todos →</a>
         </div>
         <div class="grade" id="gradeProdutos"></div>
+
+        <!-- Seção de Destaques alinhada na coluna principal -->
+        <div class="cards-grid-destaque">
+          <!-- Card 1: Filé com fritas -->
+          <div class="card-produto">
+            <div class="imagem-container">
+              <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=300" alt="Filé com fritas">
+            </div>
+            <div class="info-card">
+              <h3>Filé com fritas</h3>
+              <p class="nome-restaurante">Hortifruti Central</p>
+              <div class="precos">
+                <span class="preco-riscado">R$ 25,00</span>
+                <span class="preco-principal">R$ 14,00</span>
+              </div>
+              <div class="info-extra">
+                <span>⭐ 4.8</span> • <span>320m</span> • <span class="badge-qtd">5 disponíveis</span>
+              </div>
+            </div>
+            <button class="btn-adicionar-circulo">+</button>
+          </div>
+
+          <!-- Card 2: Strogonoff de frango -->
+          <div class="card-produto">
+            <div class="imagem-container">
+              <img src="https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=300" alt="Strogonoff de frango">
+            </div>
+            <div class="info-card">
+              <h3>Strogonoff de frango</h3>
+              <p class="nome-restaurante">Bistrô Verde</p>
+              <div class="precos">
+                <span class="preco-riscado">R$ 28,00</span>
+                <span class="preco-principal">R$ 12,00</span>
+              </div>
+              <div class="info-extra">
+                <span class="alerta-restante">Apenas 2 restantes</span>
+              </div>
+            </div>
+            <button class="btn-adicionar-circulo">+</button>
+          </div>
+
+          <!-- Card 3: Galinhada -->
+          <div class="card-produto">
+            <div class="imagem-container">
+              <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300" alt="Galinhada">
+            </div>
+            <div class="info-card">
+              <h3>Galinhada</h3>
+              <p class="nome-restaurante">Pão & Cia</p>
+              <div class="precos">
+                <span class="preco-riscado">R$ 22,00</span>
+                <span class="preco-principal">R$ 11,00</span>
+              </div>
+              <div class="info-extra">
+                <span>⭐ 4.7</span> • <span>650m</span> • <span class="badge-qtd">8 disponíveis</span>
+              </div>
+            </div>
+            <button class="btn-adicionar-circulo">+</button>
+          </div>
+        </div>
+
     </section>
 
     <aside class="lateral">
@@ -105,9 +166,6 @@
 
 <script src="auth.js"></script>
 <script>
-    // ---------------------------------------------------------
-    // Produtos: vêm do banco (tabela "ofertas") pela rota GET /ofertas
-    // ---------------------------------------------------------
     let produtos = [];
 
     async function carregarProdutos() {
@@ -115,11 +173,10 @@
             const resposta = await fetch('/ofertas');
             const ofertas = await resposta.json();
 
-            // Converte o formato do banco para o formato que os cartões usam
             produtos = ofertas.map((o) => ({
                 nome: o.nome,
                 restaurante: o.nome_restaurante,
-                categoria: 'todos',      // quando tiver categoria na tabela, troque aqui
+                categoria: 'todos',
                 emoji: '🥡',
                 de: Number(o.preco_de),
                 por: Number(o.preco_por),
@@ -135,7 +192,6 @@
     const grade = document.getElementById('gradeProdutos');
     let categoriaAtual = 'todos';
 
-    // ---------- Cabeçalho: logado ou não ----------
     const areaUsuario = document.getElementById('areaUsuario');
     if (cliente) {
         areaUsuario.innerHTML = `
@@ -148,7 +204,6 @@
         areaUsuario.innerHTML = `<a href="cliente.html" class="botao pequeno">Entrar</a>`;
     }
 
-    // ---------- Monta os cartões de produto ----------
     const real = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
     function mostrarProdutos() {
@@ -184,13 +239,11 @@
         }).join('');
     }
 
-    // ---------- Clique no "+" ----------
     grade.addEventListener('click', (e) => {
         const botao = e.target.closest('.btn-add');
         if (!botao) return;
 
         if (!pegarCliente()) {
-            // Não está logado: pede para entrar/cadastrar
             document.getElementById('nomeProdutoModal').innerText = botao.dataset.nome;
             document.getElementById('modalLogin').classList.add('aberto');
             return;
@@ -203,7 +256,6 @@
         document.getElementById('modalLogin').classList.remove('aberto');
     });
 
-    // ---------- Filtros ----------
     document.getElementById('chips').addEventListener('click', (e) => {
         const chip = e.target.closest('.chip');
         if (!chip) return;
