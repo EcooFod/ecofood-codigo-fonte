@@ -76,3 +76,4 @@ function sairCliente() {
 function iniciais(nome) {
     return nome.trim().split(/\s+/).slice(0, 2).map((p) => p[0].toUpperCase()).join('');
 }
+
