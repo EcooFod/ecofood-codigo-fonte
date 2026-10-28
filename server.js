@@ -93,10 +93,10 @@ app.listen(PORT, () => {
     console.log(`Servidor a rodar em http://localhost:${PORT}`);
 });
 
-// Rota para buscar as ofertas cadastradas no banco de dados
+// --- ROTA DE OFERTAS (Movida para antes do app.listen) ---
 app.get('/ofertas', (req, res) => {
     const query = `
-        SELECT ofertas.*, restaurantes.nome_restaurante 
+        SELECT ofertas.*, restaurantes.nome AS nome_restaurante 
         FROM ofertas 
         JOIN restaurantes ON ofertas.restaurante_id = restaurantes.id
     `;
@@ -108,5 +108,9 @@ app.get('/ofertas', (req, res) => {
         }
         res.json(results);
     });
+});
+
+app.listen(PORT, () => {
+    console.log(`Servidor a rodar em http://localhost:${PORT}`);
 });
 
