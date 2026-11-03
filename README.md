@@ -1,6 +1,7 @@
 # 🍃 EcoFood - Plataforma Digital de Conexão Sustentável
 
 > Tecnologia que aproxima estabelecimentos, consumidores e comunidade.
+> 
 
 ---
 
