@@ -2,7 +2,6 @@
 
 > Tecnologia que aproxima estabelecimentos, consumidores e comunidade.
 > 
-
 ---
 
 ## 📋 Sobre o Projeto
